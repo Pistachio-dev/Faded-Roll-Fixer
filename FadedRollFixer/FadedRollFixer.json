@@ -1,0 +1,15 @@
+{
+  "Author": "Pistachio Herald",
+  "Name": "Faded Orchestrion Roll Fixer",
+  "Punchline": "TODO: Make the punchline",
+  "Description": "TODO: Make the description",
+  "ApplicableVersion": "any",
+  "Tags": [
+    "orchestrion",
+    "roll",
+    "faded",
+    "crafting",
+    "music"
+  ],
+  "InternalName": "FadedRollFixer"
+}
