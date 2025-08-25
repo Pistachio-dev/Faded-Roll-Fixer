@@ -1,15 +1,15 @@
 {
-  "Author": "Pistachio Herald",
-  "Name": "Faded Orchestrion Roll Fixer",
-  "Punchline": "TODO: Make the punchline",
-  "Description": "TODO: Make the description",
-  "ApplicableVersion": "any",
-  "Tags": [
-    "orchestrion",
-    "roll",
-    "faded",
-    "crafting",
-    "music"
-  ],
-  "InternalName": "FadedRollFixer"
+    "Author": "Pistachio Herald",
+    "Name": "Faded Orchestrion Roll Fixer",
+    "Punchline": "Generate a crafting list for the faded orchestrion rolls in your inventory",
+    "Description": "Generate a crafting list for the faded orchestrion rolls in your inventory. Use /faded to begin",
+    "ApplicableVersion": "any",
+    "Tags": [
+        "orchestrion",
+        "roll",
+        "faded",
+        "crafting",
+        "music"
+    ],
+    "InternalName": "FadedRollFixer"
 }

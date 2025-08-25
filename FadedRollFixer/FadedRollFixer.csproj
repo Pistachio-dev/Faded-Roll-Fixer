@@ -8,6 +8,10 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="FadedRollFixer.json" />
+    <Content Include="NewestRelease.json" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Humanizer.Core" Version="2.14.1" />
   </ItemGroup>
 </Project>
