@@ -1,12 +1,12 @@
 using Dalamud.Game.Command;
+using Dalamud.Interface.Windowing;
 using Dalamud.IoC;
 using Dalamud.Plugin;
-using System.IO;
-using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
-using SamplePlugin.Windows;
+using FadedRollFixer.Data;
+using FadedRollFixer.Windows;
 
-namespace SamplePlugin;
+namespace FadedRollFixer;
 
 public sealed class Plugin : IDalamudPlugin
 {
@@ -16,6 +16,10 @@ public sealed class Plugin : IDalamudPlugin
     [PluginService] internal static IClientState ClientState { get; private set; } = null!;
     [PluginService] internal static IDataManager DataManager { get; private set; } = null!;
     [PluginService] internal static IPluginLog Log { get; private set; } = null!;
+
+    [PluginService] internal static IContextMenu ContextMenu { get; private set; } = null!;
+
+    [PluginService] internal static IGameInventory GameInventory { get; private set; } = null!;
 
     private const string CommandName = "/faded";
 
@@ -28,6 +32,8 @@ public sealed class Plugin : IDalamudPlugin
     public Plugin()
     {
         Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
+
+        LuminaSheets.Init();
 
         // You might normally want to embed resources and load them from the manifest stream
 
