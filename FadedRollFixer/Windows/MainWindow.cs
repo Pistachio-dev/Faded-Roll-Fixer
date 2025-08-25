@@ -13,7 +13,8 @@ namespace FadedRollFixer.Windows;
 public class MainWindow : Window, IDisposable
 {
     private Plugin Plugin;
-    private string craftingList = string.Empty;
+    private string finalCraftingList = string.Empty;
+    private string intermediateComponentsList = string.Empty;
 
     // We give this window a hidden ID using ##.
     // The user will see "My Amazing Window" as window title,
@@ -23,7 +24,7 @@ public class MainWindow : Window, IDisposable
     {
         SizeConstraints = new WindowSizeConstraints
         {
-            MinimumSize = new Vector2(375, 330),
+            MinimumSize = new Vector2(375, 630),
             MaximumSize = new Vector2(float.MaxValue, float.MaxValue)
         };
 
@@ -34,9 +35,9 @@ public class MainWindow : Window, IDisposable
 
     public override void Draw()
     {
-        if (ImGui.Button("Get crafting list"))
+        if (ImGui.Button("Get crafting lists"))
         {
-            craftingList = CraftingListManager.GetCraftingListForFadedRollsInInventory();
+            (finalCraftingList, intermediateComponentsList) = CraftingListManager.GetCraftingListForFadedRollsInInventory();
         }
 
         ImGui.Spacing();
@@ -46,13 +47,21 @@ public class MainWindow : Window, IDisposable
         // This works for all ImGui functions that require specific handling, examples are BeginTable() or Indent().
         using (var child = ImRaii.Child("SomeChildWithAScrollbar", Vector2.Zero, true))
         {
+
             // Check if this child is drawing
             if (child.Success)
             {
-                ImGui.TextUnformatted(craftingList);
+                ImGui.TextUnformatted(intermediateComponentsList);
                 if (ImGui.IsItemClicked())
                 {
-                    ImGui.SetClipboardText(craftingList);
+                    ImGui.SetClipboardText(intermediateComponentsList);
+                    Plugin.ChatGui.Print("List copied to clipboard");
+                }
+                ImGui.Separator();
+                ImGui.TextUnformatted(finalCraftingList);
+                if (ImGui.IsItemClicked())
+                {
+                    ImGui.SetClipboardText(finalCraftingList);
                     Plugin.ChatGui.Print("List copied to clipboard");
                 }                
             }

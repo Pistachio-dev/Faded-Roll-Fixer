@@ -13,7 +13,8 @@ namespace FadedRollFixer.Modules
     public static class RecipeManager
     {
         
-        public static Dictionary<uint, int> GetCraftingList(Dictionary<uint, int> fadedScrolls)
+        public static (Dictionary<uint, int> FinalItems, Dictionary<uint, int> IntermediateItems)
+            GetCraftingList(Dictionary<uint, int> fadedScrolls)
         {
             GetRecipes(fadedScrolls, out List<Recipe> unregisteredRecipes, out List<Recipe> complexRecipes, out List<Recipe> otherRecipes);
             return GetCraftingListInternal(ref fadedScrolls, unregisteredRecipes, complexRecipes, otherRecipes);
@@ -48,23 +49,26 @@ namespace FadedRollFixer.Modules
             }
         }
 
-        private static Dictionary<uint, int> GetCraftingListInternal(ref Dictionary<uint, int> fadedScrolls, 
+        private static (Dictionary<uint, int> FinalItems, Dictionary<uint, int> IntermediateItems)
+            GetCraftingListInternal(ref Dictionary<uint, int> fadedScrolls, 
             List<Recipe> unregisteredRecipes, List<Recipe> complexRecipes, List<Recipe> otherRecipes)
         {
-            var craftList = new Dictionary<uint, int>();
-            ApplyRecipeList(ref craftList, ref fadedScrolls, unregisteredRecipes);
+            var finalItemList = new Dictionary<uint, int>();
+            var intermediateItemList = new Dictionary<uint, int>();
+            ApplyRecipeList(ref finalItemList, ref intermediateItemList, ref fadedScrolls, unregisteredRecipes);
             int sanityCounter = 0; // Just to avoid accidental infinite loops
             while (fadedScrolls.Any() && sanityCounter < 100)
             {
-                ApplyRecipeList(ref craftList, ref fadedScrolls, complexRecipes);
-                ApplyRecipeList(ref craftList, ref fadedScrolls, otherRecipes);
+                ApplyRecipeList(ref finalItemList, ref intermediateItemList, ref fadedScrolls, complexRecipes);
+                ApplyRecipeList(ref finalItemList, ref intermediateItemList, ref fadedScrolls, otherRecipes);
                 sanityCounter++;
             }
 
-            return craftList;
+            return (finalItemList, intermediateItemList);
         }
 
-        private static void ApplyRecipeList(ref Dictionary<uint, int> craftList, ref Dictionary<uint, int> fadedScrolls, List<Recipe> recipes)
+        private static void ApplyRecipeList(ref Dictionary<uint, int> finalItemList, ref Dictionary<uint, int> intermediateItemList,
+            ref Dictionary<uint, int> fadedScrolls, List<Recipe> recipes)
         {
             foreach(var recipe in recipes)
             {
@@ -76,7 +80,17 @@ namespace FadedRollFixer.Modules
                 if (ContainsIngredients(recipe, fadedScrolls))
                 {
                     Item result = ApplyRecipe(recipe, ref fadedScrolls);
-                    craftList.AddToCount(result.RowId, 1);
+                    finalItemList.AddToCount(result.RowId, 1);
+                    for (int i = 0; i < recipe.Ingredient.Count; i++)
+                    {
+                        var item = recipe.Ingredient[i].Value;
+                        if (!ItemHelpers.IsFadedOrchestrionRoll(item) 
+                            && (item.Name.ToString().Contains("Ink", StringComparison.OrdinalIgnoreCase)
+                                || item.Name.ToString().Contains("Blank Grade ", StringComparison.OrdinalIgnoreCase)))
+                        {
+                            intermediateItemList.AddToCount(item.RowId, recipe.AmountIngredient[i]);
+                        }
+                    }
                 }
             }
         }
