@@ -35,6 +35,7 @@ public class MainWindow : Window, IDisposable
 
     public override void Draw()
     {
+        ImGui.TextUnformatted("This will work based on the scrolls on your inventory");
         if (ImGui.Button("Get crafting lists"))
         {
             (finalCraftingList, intermediateComponentsList) = CraftingListManager.GetCraftingListForFadedRollsInInventory();
