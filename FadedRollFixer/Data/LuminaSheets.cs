@@ -57,20 +57,12 @@ namespace FadedRollFixer.Data
 
         public static Dictionary<uint, CompanyCraftSupplyItem>? WorkshopSupplyItemSheet;
 
-        private static bool IsOrchestrionRoll(Item item)
-        {
-            return item.RowId == 94 && !item.Name.ToString().Contains("Blank", System.StringComparison.OrdinalIgnoreCase);
-        }
 
-        private static bool IsFadedOrchestrionRoll(Item item)
-        {
-            return item.RowId == 94 && item.Name.ToString().Contains("Faded", System.StringComparison.OrdinalIgnoreCase);
-        }
         public static void Init()
         {
             IngredientIdToRecipeLookup = Plugin.DataManager.GetExcelSheet<Recipe>()
-                .Where(r => IsOrchestrionRoll(r.ItemResult.Value))
-                .SelectMany(r => r.Ingredient.Where(i => IsFadedOrchestrionRoll(i.Value))
+                .Where(r => ItemHelpers.IsOrchestrionRoll(r.ItemResult.Value))
+                .SelectMany(r => r.Ingredient.Where(i => ItemHelpers.IsFadedOrchestrionRoll(i.Value))
                     .Select(i => new KeyValuePair<uint, Recipe>(i.RowId, r)))
                 .ToLookup(kvp => kvp.Key, kvp => kvp.Value);               
 

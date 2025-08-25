@@ -13,6 +13,7 @@ namespace FadedRollFixer.Windows;
 public class MainWindow : Window, IDisposable
 {
     private Plugin Plugin;
+    private string craftingList = string.Empty;
 
     // We give this window a hidden ID using ##.
     // The user will see "My Amazing Window" as window title,
@@ -33,18 +34,9 @@ public class MainWindow : Window, IDisposable
 
     public override void Draw()
     {
-        if (ImGui.Button("Get available orchestrions"))
+        if (ImGui.Button("Get crafting list"))
         {
-            var available = InventoryReader.GetAvailableFadedOrchestrions();
-            foreach (var keyValuePair in available)
-            {
-                Plugin.Log.Info($"{keyValuePair.Key}: {keyValuePair.Value}");
-            }
-            
-        }
-        if (ImGui.Button("Show Settings"))
-        {
-            Plugin.ToggleConfigUI();
+            craftingList = CraftingListManager.GetCraftingListForFadedRollsInInventory();
         }
 
         ImGui.Spacing();
@@ -57,39 +49,12 @@ public class MainWindow : Window, IDisposable
             // Check if this child is drawing
             if (child.Success)
             {
-                ImGui.TextUnformatted("Have a goat:");
-                
-                ImGuiHelpers.ScaledDummy(20.0f);
-
-                // Example for other services that Dalamud provides.
-                // ClientState provides a wrapper filled with information about the local player object and client.
-
-                var localPlayer = Plugin.ClientState.LocalPlayer;
-                if (localPlayer == null)
+                ImGui.TextUnformatted(craftingList);
+                if (ImGui.IsItemClicked())
                 {
-                    ImGui.TextUnformatted("Our local player is currently not loaded.");
-                    return;
-                }
-
-                if (!localPlayer.ClassJob.IsValid)
-                {
-                    ImGui.TextUnformatted("Our current job is currently not valid.");
-                    return;
-                }
-
-                // If you want to see the Macro representation of this SeString use `ToMacroString()`
-                ImGui.TextUnformatted($"Our current job is ({localPlayer.ClassJob.RowId}) \"{localPlayer.ClassJob.Value.Abbreviation}\"");
-
-                // Example for quarrying Lumina directly, getting the name of our current area.
-                var territoryId = Plugin.ClientState.TerritoryType;
-                if (Plugin.DataManager.GetExcelSheet<TerritoryType>().TryGetRow(territoryId, out var territoryRow))
-                {
-                    ImGui.TextUnformatted($"We are currently in ({territoryId}) \"{territoryRow.PlaceName.Value.Name}\"");
-                }
-                else
-                {
-                    ImGui.TextUnformatted("Invalid territory.");
-                }
+                    ImGui.SetClipboardText(craftingList);
+                    Plugin.ChatGui.Print("List copied to clipboard");
+                }                
             }
         }
     }

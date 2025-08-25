@@ -1,3 +1,4 @@
+using Dalamud.Game.Network.Structures;
 using FadedRollFixer.Data;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using Lumina.Excel.Sheets;
@@ -12,7 +13,15 @@ namespace FadedRollFixer.Modules
     public static class RecipeManager
     {
         
-        public unsafe static void GetRecipes(Dictionary<uint, int> fadedScrolls,
+        public static Dictionary<uint, int> GetCraftingList(Dictionary<uint, int> fadedScrolls)
+        {
+            GetRecipes(fadedScrolls, out List<Recipe> unregisteredRecipes, out List<Recipe> complexRecipes, out List<Recipe> otherRecipes);
+            return GetCraftingListInternal(ref fadedScrolls, unregisteredRecipes, complexRecipes, otherRecipes);
+        }
+
+
+
+        private unsafe static void GetRecipes(Dictionary<uint, int> fadedScrolls,
             out List<Recipe> unregisteredRecipes, out List<Recipe> complexRecipes, out List<Recipe> otherRecipes)
         {
             unregisteredRecipes = new();
@@ -36,6 +45,79 @@ namespace FadedRollFixer.Modules
                         otherRecipes.Add(recipe);
                     }
                 }
+            }
+        }
+
+        private static Dictionary<uint, int> GetCraftingListInternal(ref Dictionary<uint, int> fadedScrolls, 
+            List<Recipe> unregisteredRecipes, List<Recipe> complexRecipes, List<Recipe> otherRecipes)
+        {
+            var craftList = new Dictionary<uint, int>();
+            ApplyRecipeList(ref craftList, ref fadedScrolls, unregisteredRecipes);
+            int sanityCounter = 0; // Just to avoid accidental infinite loops
+            while (fadedScrolls.Any() && sanityCounter < 100)
+            {
+                ApplyRecipeList(ref craftList, ref fadedScrolls, complexRecipes);
+                ApplyRecipeList(ref craftList, ref fadedScrolls, otherRecipes);
+                sanityCounter++;
+            }
+
+            return craftList;
+        }
+
+        private static void ApplyRecipeList(ref Dictionary<uint, int> craftList, ref Dictionary<uint, int> fadedScrolls, List<Recipe> recipes)
+        {
+            foreach(var recipe in recipes)
+            {
+                if (!fadedScrolls.Any())
+                {
+                    return;
+                }
+
+                if (ContainsIngredients(recipe, fadedScrolls))
+                {
+                    Item result = ApplyRecipe(recipe, ref fadedScrolls);
+                    craftList.AddToCount(result.RowId, 1);
+                }
+            }
+        }
+
+        private static bool ContainsIngredients(Recipe recipe, Dictionary<uint, int> fadedScrolls)
+        {
+            foreach (var ingredient in recipe.Ingredient)
+            {
+                if (ItemHelpers.IsFadedOrchestrionRoll(ingredient.Value) 
+                    && (!fadedScrolls.TryGetValue(ingredient.Value.RowId, out int amount) || amount == 0))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static Item ApplyRecipe(Recipe recipe, ref Dictionary<uint, int> fadedScrolls)
+        {
+            foreach (var ingredient in recipe.Ingredient)
+            {
+                if (ItemHelpers.IsFadedOrchestrionRoll(ingredient.Value))
+                {
+                    fadedScrolls[ingredient.Value.RowId] = fadedScrolls[ingredient.Value.RowId] - 1;
+                    if (fadedScrolls[ingredient.Value.RowId] == 0)
+                    {
+                        fadedScrolls.Remove(ingredient.Value.RowId);
+                    }
+                }
+            }
+
+            return recipe.ItemResult.Value;
+        }
+
+        private static void DumpRecipeList(string listIdentifier, List<Recipe> recipes)
+        {
+            Plugin.Log.Info($"{listIdentifier}-------------------------");
+            foreach (var recipe in recipes)
+            {
+                Plugin.Log.Info(recipe.ItemResult.Value.Name.ToString());
             }
         }
     }
