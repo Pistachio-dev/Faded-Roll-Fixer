@@ -23,7 +23,10 @@ namespace FadedRollFixer.Modules
         {
             StringBuilder s = new StringBuilder($"{header} :\n");
 
-            foreach (var keyValuePair in craftingList)
+            // Order by item id
+            List<KeyValuePair<uint, int>> orderedKeys = craftingList.OrderBy(p => p.Key).ToList();
+
+            foreach (var keyValuePair in orderedKeys)
             {
                 s.Append(keyValuePair.Value);
                 s.Append("x ");
