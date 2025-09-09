@@ -12,9 +12,9 @@ public class ConfigWindow : Window, IDisposable
     // We give this window a constant ID using ###.
     // This allows for labels to be dynamic, like "{FPS Counter}fps###XYZ counter window",
     // and the window ID will always be "###XYZ counter window" for ImGui
-    public ConfigWindow(Plugin plugin) : base("A Wonderful Configuration Window###With a constant ID")
+    public ConfigWindow(Plugin plugin) : base("Configuration###With a constant ID")
     {
-        Size = new Vector2(500, 500);
+        Size = new Vector2(250, 50);
         SizeCondition = ImGuiCond.Always;
 
         Configuration = plugin.Configuration;
@@ -23,6 +23,7 @@ public class ConfigWindow : Window, IDisposable
     public void Dispose() { }
 
     public override void Draw()
-    {       
+    {
+        ImGui.TextUnformatted("There's nothing to configure.");
     }
 }
