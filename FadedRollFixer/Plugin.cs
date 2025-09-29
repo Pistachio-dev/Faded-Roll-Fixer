@@ -46,7 +46,10 @@ public sealed class Plugin : IDalamudPlugin
 
         CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
         {
-            HelpMessage = "A useful message to display in /xlhelp"
+            HelpMessage = "Opens the main window. " +
+            "Click \"Get crafting lists\" to generate a crafting list for the faded orchestrion rolls in your inventory, " +
+            "and an additional one for any inks or blank papers you might still need. " +
+            "The plugin will prioritize recipes that use multiple rolls, and alternate between recipes that use the same one."
         });
 
         PluginInterface.UiBuilder.Draw += DrawUI;
@@ -66,8 +69,10 @@ public sealed class Plugin : IDalamudPlugin
 
     public void Dispose()
     {
-        WindowSystem.RemoveAllWindows();
-
+        PluginInterface.UiBuilder.Draw -= DrawUI;
+        PluginInterface.UiBuilder.OpenConfigUi -= ToggleConfigUI;
+        PluginInterface.UiBuilder.OpenMainUi -= ToggleMainUI;
+        WindowSystem.RemoveAllWindows();        
         ConfigWindow.Dispose();
         MainWindow.Dispose();
 
