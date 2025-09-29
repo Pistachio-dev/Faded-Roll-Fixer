@@ -1,18 +1,14 @@
-using Dalamud.Game.Network.Structures;
 using FadedRollFixer.Data;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using Lumina.Excel.Sheets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FadedRollFixer.Modules
 {
     public static class RecipeManager
     {
-        
         public static (Dictionary<uint, int> FinalItems, Dictionary<uint, int> IntermediateItems)
             GetCraftingList(Dictionary<uint, int> fadedScrolls)
         {
@@ -20,9 +16,7 @@ namespace FadedRollFixer.Modules
             return GetCraftingListInternal(ref fadedScrolls, unregisteredRecipes, complexRecipes, otherRecipes);
         }
 
-
-
-        private unsafe static void GetRecipes(Dictionary<uint, int> fadedScrolls,
+        private static unsafe void GetRecipes(Dictionary<uint, int> fadedScrolls,
             out List<Recipe> unregisteredRecipes, out List<Recipe> complexRecipes, out List<Recipe> otherRecipes)
         {
             unregisteredRecipes = new();
@@ -39,7 +33,7 @@ namespace FadedRollFixer.Modules
                     }
                     if (recipe.Ingredient.Count > 3)
                     {
-                        complexRecipes.Add(recipe);                        
+                        complexRecipes.Add(recipe);
                     }
                     else
                     {
@@ -50,7 +44,7 @@ namespace FadedRollFixer.Modules
         }
 
         private static (Dictionary<uint, int> FinalItems, Dictionary<uint, int> IntermediateItems)
-            GetCraftingListInternal(ref Dictionary<uint, int> fadedScrolls, 
+            GetCraftingListInternal(ref Dictionary<uint, int> fadedScrolls,
             List<Recipe> unregisteredRecipes, List<Recipe> complexRecipes, List<Recipe> otherRecipes)
         {
             var finalItemList = new Dictionary<uint, int>();
@@ -70,7 +64,7 @@ namespace FadedRollFixer.Modules
         private static void ApplyRecipeList(ref Dictionary<uint, int> finalItemList, ref Dictionary<uint, int> intermediateItemList,
             ref Dictionary<uint, int> fadedScrolls, List<Recipe> recipes)
         {
-            foreach(var recipe in recipes)
+            foreach (var recipe in recipes)
             {
                 if (!fadedScrolls.Any())
                 {
@@ -84,7 +78,7 @@ namespace FadedRollFixer.Modules
                     for (int i = 0; i < recipe.Ingredient.Count; i++)
                     {
                         var item = recipe.Ingredient[i].Value;
-                        if (!ItemHelpers.IsFadedOrchestrionRoll(item) 
+                        if (!ItemHelpers.IsFadedOrchestrionRoll(item)
                             && (item.Name.ToString().Contains("Ink", StringComparison.OrdinalIgnoreCase)
                                 || item.Name.ToString().Contains("Blank Grade ", StringComparison.OrdinalIgnoreCase)))
                         {
@@ -99,7 +93,7 @@ namespace FadedRollFixer.Modules
         {
             foreach (var ingredient in recipe.Ingredient)
             {
-                if (ItemHelpers.IsFadedOrchestrionRoll(ingredient.Value) 
+                if (ItemHelpers.IsFadedOrchestrionRoll(ingredient.Value)
                     && (!fadedScrolls.TryGetValue(ingredient.Value.RowId, out int amount) || amount == 0))
                 {
                     return false;

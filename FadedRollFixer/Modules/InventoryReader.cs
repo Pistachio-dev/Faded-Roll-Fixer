@@ -1,11 +1,7 @@
 using FadedRollFixer.Data;
 using FFXIVClientStructs.FFXIV.Client.Game;
-using Lumina.Excel.Sheets;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FadedRollFixer.Modules
 {

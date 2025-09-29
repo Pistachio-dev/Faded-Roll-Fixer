@@ -1,7 +1,7 @@
-using System;
-using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Windowing;
+using System;
+using System.Numerics;
 
 namespace FadedRollFixer.Windows;
 
@@ -13,7 +13,8 @@ public class ConfigWindow : Window, IDisposable
         SizeCondition = ImGuiCond.Always;
     }
 
-    public void Dispose() { }
+    public void Dispose()
+    { }
 
     public override void Draw()
     {

@@ -1,9 +1,5 @@
 using Lumina.Excel.Sheets;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FadedRollFixer.Data
 {
@@ -13,7 +9,7 @@ namespace FadedRollFixer.Data
         {
             foreach (var recipe in Recipes)
             {
-                if(recipe.Ingredient.Count > 3)
+                if (recipe.Ingredient.Count > 3)
                 {
                     return true;
                 }

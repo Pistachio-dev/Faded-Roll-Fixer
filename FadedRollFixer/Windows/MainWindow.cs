@@ -1,12 +1,9 @@
-using System;
-using System.Numerics;
 using Dalamud.Bindings.ImGui;
-using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
 using FadedRollFixer.Modules;
-using Humanizer;
-using Lumina.Excel.Sheets;
+using System;
+using System.Numerics;
 
 namespace FadedRollFixer.Windows;
 
@@ -28,7 +25,8 @@ public class MainWindow : Window, IDisposable
         Plugin = plugin;
     }
 
-    public void Dispose() { }
+    public void Dispose()
+    { }
 
     public override void Draw()
     {
@@ -45,7 +43,6 @@ public class MainWindow : Window, IDisposable
         // This works for all ImGui functions that require specific handling, examples are BeginTable() or Indent().
         using (var child = ImRaii.Child("SomeChildWithAScrollbar", Vector2.Zero, true))
         {
-
             // Check if this child is drawing
             if (child.Success)
             {
@@ -61,7 +58,7 @@ public class MainWindow : Window, IDisposable
                 {
                     ImGui.SetClipboardText(finalCraftingList);
                     Plugin.ChatGui.Print("List copied to clipboard");
-                }                
+                }
             }
         }
     }

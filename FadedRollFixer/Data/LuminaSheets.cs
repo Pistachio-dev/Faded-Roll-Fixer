@@ -10,7 +10,6 @@ namespace FadedRollFixer.Data
 {
     public class LuminaSheets
     {
-
         public static Dictionary<uint, Recipe>? RecipeSheet;
 
         public static ILookup<uint, Recipe> IngredientIdToRecipeLookup;
@@ -57,14 +56,13 @@ namespace FadedRollFixer.Data
 
         public static Dictionary<uint, CompanyCraftSupplyItem>? WorkshopSupplyItemSheet;
 
-
         public static void Init()
         {
             IngredientIdToRecipeLookup = Plugin.DataManager.GetExcelSheet<Recipe>()
                 .Where(r => ItemHelpers.IsOrchestrionRoll(r.ItemResult.Value))
                 .SelectMany(r => r.Ingredient.Where(i => ItemHelpers.IsFadedOrchestrionRoll(i.Value))
                     .Select(i => new KeyValuePair<uint, Recipe>(i.RowId, r)))
-                .ToLookup(kvp => kvp.Key, kvp => kvp.Value);               
+                .ToLookup(kvp => kvp.Key, kvp => kvp.Value);
 
             RecipeSheet = Plugin.DataManager?.GetExcelSheet<Recipe>()?
            .Where(x => x.ItemResult.RowId > 0)
@@ -158,7 +156,6 @@ namespace FadedRollFixer.Data
 
     public static class SheetExtensions
     {
-
         public static string NameOfBuff(this ushort id)
         {
             if (id == 0) return "";
