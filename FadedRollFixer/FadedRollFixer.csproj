@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Dalamud.NET.Sdk/13.1.0">
   <PropertyGroup>
-    <Version>0.0.0.1</Version>
+    <Version>0.1.1.1</Version>
     <Description>An FFXIV plugin to make fixing faded orchestrion rolls easier.</Description>
     <PackageProjectUrl>https://github.com/Pistachio-dev/Faded-Roll-Fixer</PackageProjectUrl>
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
