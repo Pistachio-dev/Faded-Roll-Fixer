@@ -3,6 +3,12 @@
     "AssemblyVersion": "0.1.1.1",
     "DalamudApiLevel": 13,
     "ChangeLog": "- Initial release",
+    "IsTest": false
+  },
+  {
+    "AssemblyVersion": "0.1.1.1",
+    "DalamudApiLevel": 13,
+    "ChangeLog": "- Initial release",
     "IsTest": true
   },
   {

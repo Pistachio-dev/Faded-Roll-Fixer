@@ -12,16 +12,16 @@
       "crafting",
       "music"
     ],
-    "DalamudApiLevel": 13,
-    "AssemblyVersion": "0.1.0.1",
-    "Changelog": "- Initial release",
-    "DownloadLinkInstall": "https://github.com/Pistachio-dev/Faded-Roll-Fixer/releases/download/0.1.0.1_release/FadedRollFixer.zip",
-    "DownloadLinkUpdate": "https://github.com/Pistachio-dev/Faded-Roll-Fixer/releases/download/0.1.0.1_release/FadedRollFixer.zip",
     "TestingDalamudApiLevel": 13,
     "TestingAssemblyVersion": "0.1.1.1",
     "TestingChangelog": "- Initial release",
     "DownloadLinkTesting": "https://github.com/Pistachio-dev/Faded-Roll-Fixer/releases/download/0.1.1.1_testing/FadedRollFixer.zip",
-    "LastUpdate": 1759149333,
+    "DalamudApiLevel": 13,
+    "AssemblyVersion": "0.1.1.1",
+    "Changelog": "- Initial release",
+    "DownloadLinkInstall": "https://github.com/Pistachio-dev/Faded-Roll-Fixer/releases/download/0.1.1.1_release/FadedRollFixer.zip",
+    "DownloadLinkUpdate": "https://github.com/Pistachio-dev/Faded-Roll-Fixer/releases/download/0.1.1.1_release/FadedRollFixer.zip",
+    "LastUpdate": 1762767001,
     "InternalName": "FadedRollFixer"
   }
 ]
